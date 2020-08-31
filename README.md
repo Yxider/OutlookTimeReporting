@@ -13,6 +13,8 @@ A VBA macro to create a time report based on tagged colander events in outlook.
 
 ![Alt text](/images/DetailedReport.PNG?raw=true "Report form clipboard.")
 
+Tip: A custom button can be added to the ribbon i outlook to trigger the macro.
+
 # TODOs
 - Use category as a simple category and add the meeting title to another column in the report.
 - Fix hard coded swedish weekday value to a non-language dependant format.
