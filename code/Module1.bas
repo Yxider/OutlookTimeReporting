@@ -1,4 +1,3 @@
-Attribute VB_Name = "Module1"
 Sub TotalCategories()
 
 Dim app As New Outlook.Application
@@ -27,6 +26,9 @@ apptList.Sort "[Start]"
 
 firstDay = DateSerial(Year(DateAdd("m", 0, Now)), Month(DateAdd("m", 0, Now)), 1)
 lastDay = DateAdd("d", -1, DateSerial(Year(Now), Month(DateAdd("m", 1, Now)), 1))
+If Month(lastDay) = 12 Then
+    lastDay = DateAdd("yyyy", 1, lastDay)
+End If
 
 
 Dim Message, Title, Default, MyValue
@@ -41,7 +43,8 @@ Default = lastDay    ' Set default.
 lastDay = InputBox(Message, Title, Default)
 
 ' firstDay = DateAdd("d", -1, firstDay)
- lastDay = DateAdd("d", 1, lastDay)
+lastDay = DateAdd("d", 1, lastDay)
+
 
 ' Get selected date
 Set explorer = app.ActiveExplorer()
@@ -68,22 +71,29 @@ Next
 
 Dim sum As Double
 Dim toWork As Integer
+Dim outoOfOfficeTime As Integer
 Dim day As Date
 Dim dayName As String
 day = firstDay
 toWork = 0
+outoOfOfficeTime = 0
 
 keyArray = catHours.Keys
 For Each key In keyArray
-    If key <> "" And key <> "Holiday" Then
+    If key <> "" And key <> "Holiday" And key <> "OoO" Then
         outMsgClipboard = outMsgClipboard & key & Chr(9) & (catHours(key) / 60) & vbCrLf
         sum = sum + (catHours(key) / 60)
     End If
-    
+
     dayName = WeekdayName(Weekday(day, vbMonday))
-    If dayName <> "lördag" And dayName <> "söndag" Then
+    If dayName <> "lÃ¶rdag" And dayName <> "sÃ¶ndag" Then
         toWork = toWork + 1
     End If
+
+    If key = "OoO" Then
+        outoOfOfficeTime = outoOfOfficeTime + (catHours(key) / 60)
+    End If
+
     day = day + 1
 Next
 'Copy to clipboard
@@ -93,7 +103,7 @@ toWork = Return_workdays_between_dates(firstDay, lastDay)
 
 Dim TotalWorkHours As Integer
 Dim msg As String
-TotalWorkHours = toWork * 8
+TotalWorkHours = toWork * 8 - outoOfOfficeTime
 msg = "Worked: " & sum & " hours." & vbCrLf & "Planned: " & TotalWorkHours & " hours."
 MsgBox msg
 
@@ -116,14 +126,14 @@ Public Function Return_workdays_between_dates(startDate, endDate)
     Dim daysCount As Integer
     day = startDate
     daysCount = 0
-    
+
     Do While day < endDate
-        If WeekdayName(Weekday(day, vbMonday)) <> "lördag" And WeekdayName(Weekday(day, vbMonday)) <> "söndag" Then
+        If WeekdayName(Weekday(day, vbMonday)) <> "lÃ¶rdag" And WeekdayName(Weekday(day, vbMonday)) <> "sÃ¶ndag" Then
             daysCount = daysCount + 1
         End If
         day = DateAdd("d", 1, day)
     Loop
-    
+
     Return_workdays_between_dates = daysCount
 
 End Function
@@ -138,4 +148,3 @@ Sub CopyText(Text As String)
     MSForms_DataObject.PutInClipboard
     Set MSForms_DataObject = Nothing
 End Sub
-
