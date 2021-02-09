@@ -1,5 +1,5 @@
 # OutlookTimeReporting
-A VBA macro to create a time report based on tagged colander events in outlook.
+A VBA macro to create a time report based on tagged calendar events in outlook.
 
 
 # How to
@@ -15,6 +15,6 @@ A VBA macro to create a time report based on tagged colander events in outlook.
 
 Tip: A custom button can be added to the ribbon i outlook to trigger the macro.
 
-# TODOs
+# ToDo
 - Use category as a simple category and add the meeting title to another column in the report.
 - Fix hard coded swedish weekday value to a non-language dependant format.
